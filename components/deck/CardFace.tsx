@@ -43,7 +43,7 @@ export function CardFace({
         </div>
         <div className="flex-1 flex items-center justify-center">
           <p
-            className="m-0 font-serif font-bold text-center text-ink"
+            className="m-0 font-card font-bold text-center text-ink"
             style={{
               fontSize: 'clamp(25px, 6.6vw, 33px)',
               lineHeight: 1.34,

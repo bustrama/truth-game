@@ -30,6 +30,7 @@ const config: Config = {
         // Wired to next/font CSS variables (see app/layout.tsx).
         serif: ['var(--font-frank)', 'Georgia', 'serif'],
         sans: ['var(--font-heebo)', 'system-ui', 'sans-serif'],
+        card: ['var(--font-card)', 'var(--font-frank)', 'cursive'],
       },
       backgroundImage: {
         'app-radial':

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Frank_Ruhl_Libre, Heebo } from 'next/font/google';
+import { Frank_Ruhl_Libre, Heebo, Playpen_Sans_Hebrew } from 'next/font/google';
 import './globals.css';
 
 // Self-hosted at build time by next/font (no runtime CDN request).
@@ -7,6 +7,14 @@ const frank = Frank_Ruhl_Libre({
   subsets: ['hebrew', 'latin'],
   weight: ['500', '700', '900'],
   variable: '--font-frank',
+  display: 'swap',
+});
+
+// Card-prompt face — friendly handwritten Hebrew.
+const playpen = Playpen_Sans_Hebrew({
+  subsets: ['hebrew', 'latin'],
+  weight: ['400', '600', '700'],
+  variable: '--font-card',
   display: 'swap',
 });
 
@@ -36,7 +44,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="he" dir="rtl" className={`${frank.variable} ${heebo.variable}`}>
+    <html
+      lang="he"
+      dir="rtl"
+      className={`${frank.variable} ${heebo.variable} ${playpen.variable}`}
+    >
       <body>{children}</body>
     </html>
   );
