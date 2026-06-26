@@ -1,6 +1,7 @@
 'use client';
 
 import { PrimaryButton, OptionButton } from '@/components/ui/buttons';
+import { SupportButton } from '@/components/ui/SupportButton';
 
 export function ExhaustedScreen({
   onResetReplay,
@@ -43,6 +44,7 @@ export function ExhaustedScreen({
         <OptionButton className="!py-4 min-h-[54px] !text-base" onClick={onRestart}>
           להתחיל מחדש עם הגדרות אחרות
         </OptionButton>
+        <SupportButton className="mt-1" />
       </div>
     </div>
   );

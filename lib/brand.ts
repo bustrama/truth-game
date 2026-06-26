@@ -11,6 +11,8 @@ export const BRAND = {
   tagline: 'שאלה אחת בכל פעם — וההיכרות מעמיקה.',
   description:
     'כל קלף הוא שאלה, וכל שאלה היא הזדמנות לגלות משהו חדש זה על זה. בלי משימות ובלי עונשים — רק אמת.',
+  /** Support / "buy me a coffee" link. */
+  kofi: 'https://ko-fi.com/bustrama',
 } as const;
 
 export type Brand = typeof BRAND;

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { PrimaryButton, GhostButton } from '@/components/ui/buttons';
 import { MenuSheet } from '@/components/ui/MenuSheet';
+import { SupportButton } from '@/components/ui/SupportButton';
 import { BRAND } from '@/lib/brand';
 
 const STEPS = [
@@ -67,9 +68,10 @@ export function WelcomeScreen({
           ))}
         </ol>
 
-        {/* CTA + privacy */}
+        {/* CTA + support + privacy */}
         <div className="flex flex-col gap-3 pt-1">
           <PrimaryButton onClick={onBegin}>בואו נתחיל</PrimaryButton>
+          <SupportButton />
           <p className="m-0 text-center text-[12px] leading-[1.6] text-muted-2">
             בלי הרשמה. התשובות נשארות ביניכם — רק ההתקדמות נשמרת במכשיר שלכם.
           </p>
