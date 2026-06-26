@@ -2,12 +2,12 @@
 
 import { useRef, useState } from 'react';
 import { TopBar } from './TopBar';
-import { CardStack, type FlingDir } from './CardStack';
+import { CardStack } from './CardStack';
 import { PrimaryButton } from '@/components/ui/buttons';
 import { turnFor } from '@/lib/deckView';
 import type { Gender } from '@/lib/types';
 
-const ANIM_MS = 480;
+const ANIM_MS = 520;
 
 export function DeckScreen({
   deck,
@@ -26,15 +26,13 @@ export function DeckScreen({
   onAdvance: () => void;
   onQuit: () => void;
 }) {
-  const [dir, setDir] = useState<FlingDir>('left');
   const [locked, setLocked] = useState(false);
   const lockRef = useRef(false);
 
-  function advance(d: FlingDir) {
+  function advance() {
     if (lockRef.current) return;
     lockRef.current = true;
     setLocked(true);
-    setDir(d);
     onAdvance();
     if (reduced) {
       // crossfade is quick; release sooner
@@ -63,7 +61,6 @@ export function DeckScreen({
         cursor={cursor}
         names={names}
         genders={genders}
-        dir={dir}
         locked={locked}
         reduced={reduced}
         onAdvance={advance}
@@ -72,7 +69,7 @@ export function DeckScreen({
       <div className="flex flex-col gap-2.5 items-center">
         <PrimaryButton
           className="w-full"
-          onClick={() => advance('left')}
+          onClick={() => advance()}
           disabled={locked}
         >
           הבא

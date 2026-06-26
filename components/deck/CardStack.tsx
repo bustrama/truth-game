@@ -7,40 +7,42 @@ import { faceGradient, genderForIdx, turnFor } from '@/lib/deckView';
 import type { Gender } from '@/lib/types';
 import { CardFace } from './CardFace';
 
-export type FlingDir = 'left' | 'right';
-
-// Depth-based rest transforms (from the prototype's restTransform).
+// Depth-based rest transforms. Cards use transform-origin center-bottom, so each
+// deeper card's bottom edge peeks below the front by exactly its `y` → a clear stack.
 const REST = [
-  { y: 0, z: 0, scale: 1, rotateX: 0, opacity: 1 },
-  { y: 10, z: -48, scale: 0.955, rotateX: 2.5, opacity: 0.82 },
-  { y: 20, z: -96, scale: 0.91, rotateX: 4, opacity: 0.6 },
+  { y: 0, z: 0, scale: 1, rotateX: 0, rotateZ: 0, opacity: 1 },
+  { y: 20, z: -44, scale: 0.965, rotateX: 1.5, rotateZ: -2, opacity: 0.94 },
+  { y: 40, z: -88, scale: 0.93, rotateX: 3, rotateZ: 2, opacity: 0.86 },
+  { y: 60, z: -132, scale: 0.895, rotateX: 4.5, rotateZ: -2.8, opacity: 0.74 },
 ];
 
-function fling(dir: FlingDir) {
-  return {
-    x: dir === 'right' ? 640 : -640,
-    y: -46,
-    z: 180,
-    rotateZ: dir === 'right' ? 12 : -12,
-    rotateY: dir === 'right' ? -22 : 22,
-    opacity: 0,
-    transition: { duration: 0.46, ease: [0.5, 0, 0.75, 0] as const },
-  };
-}
+// Advance = the top card tucks to the back of the stack: a small lift, then it
+// drops back, scales down and fades while the cards beneath promote forward.
+// `x: 0` re-centers a card that was mid-drag. Symmetric (no swipe direction).
+const TUCK_EXIT = {
+  x: 0,
+  y: [0, -16, 46],
+  z: [0, 30, -130],
+  scale: [1, 1.04, 0.84],
+  rotateX: [0, -2, 6],
+  rotateZ: 0,
+  opacity: [1, 1, 0],
+  zIndex: 60,
+  transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] as const, times: [0, 0.32, 1] },
+};
 
 const BASE_SHADOW =
   '0 28px 46px -16px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.04)';
 const DRAG_SHADOW =
   '0 50px 70px -24px rgba(0,0,0,.85), 0 0 34px -6px rgba(230,180,90,.4)';
 
-const VISIBLE = 3;
+const VISIBLE = 4;
 
 export function CardStack({
   deck,
   cursor,
   names,
   genders,
-  dir,
   locked,
   reduced,
   onAdvance,
@@ -49,10 +51,9 @@ export function CardStack({
   cursor: number;
   names: [string, string];
   genders: [Gender, Gender];
-  dir: FlingDir;
   locked: boolean;
   reduced: boolean;
-  onAdvance: (dir: FlingDir) => void;
+  onAdvance: () => void;
 }) {
   const depthCount = reduced ? 1 : VISIBLE;
 
@@ -69,7 +70,7 @@ export function CardStack({
   function handleDragEnd(_: unknown, info: PanInfo) {
     if (locked) return;
     const passed = Math.abs(info.offset.x) > 100 || Math.abs(info.velocity.x) > 500;
-    if (passed) onAdvance(info.offset.x > 0 ? 'right' : 'left');
+    if (passed) onAdvance();
   }
 
   return (
@@ -82,7 +83,7 @@ export function CardStack({
           perspective: 1200,
         }}
       >
-        <AnimatePresence custom={dir} initial={false}>
+        <AnimatePresence initial={false}>
           {window
             .slice()
             .reverse() /* render deepest first so the top card is last in DOM */
@@ -117,20 +118,19 @@ export function CardStack({
               return (
                 <motion.div
                   key={id}
-                  custom={dir}
                   className="absolute inset-0 rounded-3xl border border-line overflow-hidden will-change-transform"
                   style={{
                     background: faceGradient(meta.from, gender),
                     boxShadow: BASE_SHADOW,
                     transformStyle: 'preserve-3d',
+                    transformOrigin: '50% 100%',
                     zIndex: 50 - depth,
                     touchAction: 'none',
                     cursor: isTop && !locked ? 'grab' : 'default',
                   }}
-                  initial={{ ...REST[depth], opacity: 0 }}
-                  animate={REST[depth]}
-                  variants={{ exit: (d: FlingDir) => fling(d) }}
-                  exit="exit"
+                  initial={{ ...REST[Math.min(depth, REST.length - 1)], opacity: 0 }}
+                  animate={REST[Math.min(depth, REST.length - 1)]}
+                  exit={TUCK_EXIT}
                   transition={{ duration: 0.46, ease: [0.22, 1, 0.36, 1] }}
                   drag={isTop && !locked ? 'x' : false}
                   dragSnapToOrigin
