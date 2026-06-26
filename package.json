@@ -2,7 +2,8 @@
   "name": "tagidli",
   "version": "1.0.0",
   "private": true,
-  "description": "תגיד לי (Tagidli) — a Hebrew, RTL, single-device pass-and-play card game for two people.",
+  "description": "תגיד לי (Tagidli) — a Hebrew, RTL, single-device pass-and-play card game for two people. Live at https://www.tagidli.com/",
+  "homepage": "https://www.tagidli.com/",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

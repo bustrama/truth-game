@@ -1,5 +1,7 @@
 # תגיד לי — Tagidli
 
+**Live:** [www.tagidli.com](https://www.tagidli.com/)
+
 A mobile-first, Hebrew (RTL) card game for two people — couples or friends — to get
 to know each other through "truth" prompts. **Single-device pass-and-play**: one phone,
 passed back and forth. No backend, no accounts, no database. Everything runs client-side;
