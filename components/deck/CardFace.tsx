@@ -6,25 +6,21 @@ export function CardFace({
   categoryColor,
   text,
   turnLabel,
-  isTop,
 }: {
   categoryName: string;
   categoryColor: string;
   text: string;
   turnLabel: string | null;
-  isTop: boolean;
 }) {
   return (
     <>
-      {/* gold edge accent bar */}
+      {/* glossy surface highlight — a soft top-left light gives the face a 3D feel */}
       <div
         aria-hidden
-        className="absolute top-3.5 bottom-3.5 w-1 rounded z-[3] transition-[opacity,box-shadow] duration-300"
+        className="pointer-events-none absolute inset-0 rounded-3xl z-[1]"
         style={{
-          insetInlineEnd: 0,
-          background: 'linear-gradient(180deg, #F2D49A, #E6B45A)',
-          boxShadow: `0 0 22px 3px rgba(230,180,90,${isTop ? 0.6 : 0.25})`,
-          opacity: isTop ? 1 : 0.5,
+          background:
+            'linear-gradient(135deg, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.04) 20%, transparent 44%)',
         }}
       />
       <div className="relative z-[2] flex flex-col h-full justify-between px-6 py-[26px]">
