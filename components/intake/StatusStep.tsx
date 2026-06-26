@@ -20,7 +20,7 @@ export function StatusStep({
 }) {
   return (
     <StepShell screen="status" onBack={onBack}>
-      <h1 className="font-serif font-bold text-[27px] leading-[1.3] m-0 text-center">
+      <h1 className="font-sans font-bold text-[27px] leading-[1.3] m-0 text-center">
         מה הסטטוס שלכם?
       </h1>
       <div className="grid grid-cols-2 gap-3">

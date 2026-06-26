@@ -39,7 +39,7 @@ export function WelcomeScreen({
 
         {/* Hero */}
         <div className="flex flex-col gap-3 items-center text-center">
-          <h1 className="font-serif font-bold text-[44px] leading-[1.05] m-0 text-ink">
+          <h1 className="font-sans font-extrabold text-[44px] leading-[1.05] m-0 text-ink">
             {BRAND.nameHe}
           </h1>
           <p className="m-0 text-[16px] text-muted-3">{BRAND.tagline}</p>

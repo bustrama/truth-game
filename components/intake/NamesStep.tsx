@@ -95,7 +95,7 @@ export function NamesStep({
       }
     >
       <div className="text-center flex flex-col gap-2">
-        <h1 className="font-serif font-bold text-[27px] leading-[1.3] m-0">
+        <h1 className="font-sans font-bold text-[27px] leading-[1.3] m-0">
           איך קוראים לכם?
         </h1>
         <p className="m-0 text-sm text-muted">

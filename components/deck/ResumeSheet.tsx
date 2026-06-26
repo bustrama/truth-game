@@ -34,7 +34,7 @@ export function ResumeSheet({
       >
         <div className="w-[42px] h-1 bg-line rounded self-center" />
         <div className="text-center flex flex-col gap-1.5">
-          <h2 className="font-serif font-bold text-[22px] m-0">יש משחק פתוח</h2>
+          <h2 className="font-sans font-bold text-[22px] m-0">יש משחק פתוח</h2>
           <p className="m-0 text-sm text-muted">נשארו עוד {remaining} קלפים</p>
         </div>
         <div className="flex flex-col gap-2.5">

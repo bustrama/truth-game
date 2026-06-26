@@ -25,12 +25,12 @@ export function ExhaustedScreen({
           className="absolute inset-0 rounded-[22px] border border-line flex items-center justify-center"
           style={{ background: 'linear-gradient(165deg,#241d3a,#1E1830)' }}
         >
-          <div className="font-serif text-[40px] text-gold">סוף</div>
+          <div className="font-sans font-extrabold text-[40px] text-gold">סוף</div>
         </div>
       </div>
 
       <div className="flex flex-col gap-2">
-        <h1 className="font-serif font-bold text-[25px] leading-[1.35] m-0">
+        <h1 className="font-sans font-bold text-[25px] leading-[1.35] m-0">
           ראיתם את כל השאלות
         </h1>
         <p className="m-0 text-[15px] text-muted leading-[1.6]">

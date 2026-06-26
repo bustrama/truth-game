@@ -27,10 +27,9 @@ const config: Config = {
         'surface-4': '#221b36',
       },
       fontFamily: {
-        // Wired to next/font CSS variables (see app/layout.tsx).
-        serif: ['var(--font-frank)', 'Georgia', 'serif'],
+        // Two fonts only (see app/layout.tsx): Heebo everywhere, Playpen on cards.
         sans: ['var(--font-heebo)', 'system-ui', 'sans-serif'],
-        card: ['var(--font-card)', 'var(--font-frank)', 'cursive'],
+        card: ['var(--font-card)', 'var(--font-heebo)', 'cursive'],
       },
       backgroundImage: {
         'app-radial':

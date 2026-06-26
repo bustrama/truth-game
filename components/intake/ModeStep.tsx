@@ -17,7 +17,7 @@ export function ModeStep({
 }) {
   return (
     <StepShell screen="mode" onBack={onBack}>
-      <h1 className="font-serif font-bold text-[27px] leading-[1.3] m-0 text-center">
+      <h1 className="font-sans font-bold text-[27px] leading-[1.3] m-0 text-center">
         איך אתם משחקים?
       </h1>
       <div className="flex flex-col gap-3.5">

@@ -54,7 +54,7 @@ export function MenuSheet({
       >
         <div className="w-[42px] h-1 bg-line rounded self-center" />
         {title && (
-          <h2 className="font-serif font-bold text-[20px] m-0 text-center">
+          <h2 className="font-sans font-bold text-[20px] m-0 text-center">
             {title}
           </h2>
         )}
