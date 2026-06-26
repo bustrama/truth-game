@@ -81,6 +81,10 @@ function StackCard({
   const x = useMotionValue(0);
   const rotateY = useTransform(x, [-240, 240], [15, -15], { clamp: true });
   const specularX = useTransform(x, [-240, 240], [70, -70], { clamp: true });
+  // Specular is invisible at rest and only sweeps in while the card is tilted.
+  const specularOpacity = useTransform(x, [-120, 0, 120], [1, 0, 1], {
+    clamp: true,
+  });
 
   const face = (
     <CardFace
@@ -143,6 +147,7 @@ function StackCard({
             left: '25%',
             width: '50%',
             x: specularX,
+            opacity: specularOpacity,
             background:
               'linear-gradient(105deg, transparent 0%, rgba(255,255,255,0.10) 50%, transparent 100%)',
           }}
