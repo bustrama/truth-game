@@ -12,9 +12,14 @@ import { buildDeck } from './filter';
 import { QUESTIONS } from './questions';
 import { randomSeed } from './shuffle';
 import {
+  addSeen,
   clearAll,
+  clearSeen,
   hasResumableGame,
+  hasSavedData,
   loadGame,
+  loadSeen,
+  resetAll,
   saveGame,
 } from './storage';
 
@@ -49,6 +54,8 @@ export interface MachineState {
   showResume: boolean;
   resumeRemaining: number;
   hydrated: boolean;
+  hasSaved: boolean; // is there any saved data to reset?
+  outOfFresh: boolean; // exhausted because no unseen questions remain
 }
 
 const initialState: MachineState = {
@@ -66,6 +73,8 @@ const initialState: MachineState = {
   showResume: false,
   resumeRemaining: 0,
   hydrated: false,
+  hasSaved: false,
+  outOfFresh: false,
 };
 
 type Action =
@@ -83,7 +92,9 @@ type Action =
   | { type: 'FULL_RESTART' }
   | { type: 'QUIT' }
   | { type: 'DO_RESUME' }
-  | { type: 'DO_RESTART' };
+  | { type: 'DO_RESTART' }
+  | { type: 'RESET' }
+  | { type: 'RESET_REPLAY' };
 
 function assembleIntake(s: MachineState): Intake {
   return {
@@ -97,26 +108,42 @@ function assembleIntake(s: MachineState): Intake {
   };
 }
 
+/** Build a fresh deck for an intake, excluding the persistent asked-history
+ *  (unless `replay`, which means the history was just reset). */
+function dealDeck(
+  s: MachineState,
+  intake: Intake,
+  replay: boolean,
+): MachineState {
+  const exclude = replay ? undefined : new Set(loadSeen());
+  const { ids } = buildDeck(QUESTIONS, intake, randomSeed(), exclude);
+  if (ids.length === 0) {
+    // every eligible question has already been asked
+    return { ...s, intake, deck: [], cursor: 0, screen: 'exhausted', outOfFresh: true, hasSaved: true };
+  }
+  return { ...s, intake, deck: ids, cursor: 0, screen: 'deck', outOfFresh: false, hasSaved: true };
+}
+
 function startDeck(s: MachineState, playerA: string, playerB: string): MachineState {
   const next: MachineState = { ...s, playerA, playerB };
-  const intake = assembleIntake(next);
-  const { ids } = buildDeck(QUESTIONS, intake, randomSeed());
-  return { ...next, intake, deck: ids, cursor: 0, screen: 'deck' };
+  return dealDeck(next, assembleIntake(next), false);
 }
 
 function reducer(state: MachineState, action: Action): MachineState {
   switch (action.type) {
     case 'HYDRATE': {
       const saved = action.resumable;
+      const hasSaved = hasSavedData();
       if (saved && hasResumableGame(saved)) {
         return {
           ...state,
           hydrated: true,
+          hasSaved,
           showResume: true,
           resumeRemaining: saved.deck.length - saved.cursor,
         };
       }
-      return { ...state, hydrated: true };
+      return { ...state, hydrated: true, hasSaved };
     }
     case 'BEGIN':
       return { ...state, screen: 'age' };
@@ -144,21 +171,30 @@ function reducer(state: MachineState, action: Action): MachineState {
       return startDeck(state, action.playerA.trim(), action.playerB.trim());
     case 'ADVANCE': {
       const next = state.cursor + 1;
-      if (next >= state.deck.length) return { ...state, screen: 'exhausted' };
+      // reaching the end of an all-fresh deck means everything's been asked
+      if (next >= state.deck.length)
+        return { ...state, screen: 'exhausted', outOfFresh: true, hasSaved: true };
       return { ...state, cursor: next };
     }
     case 'RESHUFFLE': {
       if (!state.intake) return state;
-      const { ids } = buildDeck(QUESTIONS, state.intake, randomSeed());
-      return { ...state, deck: ids, cursor: 0, screen: 'deck' };
+      return dealDeck(state, state.intake, false);
     }
     case 'QUIT':
-      return { ...initialState, hydrated: true };
+      return { ...initialState, hydrated: true, hasSaved: hasSavedData() };
     case 'FULL_RESTART':
-      return { ...initialState, hydrated: true };
+      return { ...initialState, hydrated: true, hasSaved: hasSavedData() };
     case 'DO_RESTART':
       // Returning player explicitly chose a fresh game — skip the landing.
-      return { ...initialState, hydrated: true, screen: 'age' };
+      return { ...initialState, hydrated: true, screen: 'age', hasSaved: hasSavedData() };
+    case 'RESET':
+      // Full wipe (storage cleared by the api handler) → back to the landing.
+      return { ...initialState, hydrated: true, hasSaved: false };
+    case 'RESET_REPLAY': {
+      // Asked-history was just cleared by the api handler; replay from scratch.
+      if (!state.intake) return { ...initialState, hydrated: true, hasSaved: false };
+      return dealDeck(state, state.intake, true);
+    }
     case 'DO_RESUME': {
       const saved = loadGame();
       if (!saved) return { ...state, showResume: false };
@@ -199,6 +235,8 @@ export interface GameApi {
   quit: () => void;
   doResume: () => void;
   doRestart: () => void;
+  reset: () => void; // full wipe (game + intake + asked history) → landing
+  resetReplay: () => void; // clear asked history, replay the same intake
 }
 
 export function useGame(): GameApi {
@@ -212,7 +250,8 @@ export function useGame(): GameApi {
     dispatch({ type: 'HYDRATE', resumable: loadGame() });
   }, []);
 
-  // Persist whenever an active game advances.
+  // Persist whenever an active game advances, and record the drawn card in the
+  // persistent asked-history so future rounds don't repeat it.
   useEffect(() => {
     if (!state.intake) return;
     if (state.screen !== 'deck' && state.screen !== 'exhausted') return;
@@ -223,6 +262,9 @@ export function useGame(): GameApi {
       turn: state.cursor % 2 === 0 ? 'A' : 'B',
       seen: state.deck.slice(0, state.cursor),
     });
+    if (state.screen === 'deck' && state.deck[state.cursor]) {
+      addSeen([state.deck[state.cursor]]);
+    }
   }, [state.intake, state.deck, state.cursor, state.screen]);
 
   return {
@@ -246,6 +288,14 @@ export function useGame(): GameApi {
     doRestart: () => {
       clearAll();
       dispatch({ type: 'DO_RESTART' });
+    },
+    reset: () => {
+      resetAll();
+      dispatch({ type: 'RESET' });
+    },
+    resetReplay: () => {
+      clearSeen();
+      dispatch({ type: 'RESET_REPLAY' });
     },
   };
 }

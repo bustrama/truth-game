@@ -20,7 +20,13 @@ export function Game() {
 
   return (
     <main className="relative w-full min-h-[100dvh] overflow-hidden flex flex-col">
-      {s.screen === 'welcome' && <WelcomeScreen onBegin={g.begin} />}
+      {s.screen === 'welcome' && (
+        <WelcomeScreen
+          onBegin={g.begin}
+          hasSaved={s.hasSaved}
+          onReset={g.reset}
+        />
+      )}
       {s.screen === 'age' && <AgeStep onPick={g.setAge} />}
       {s.screen === 'status' && <StatusStep onPick={g.setStatus} onBack={g.back} />}
       {s.screen === 'kids' && <KidsStep onPick={g.setKids} onBack={g.back} />}
@@ -41,10 +47,11 @@ export function Game() {
           reduced={reduced}
           onAdvance={g.advance}
           onQuit={g.quit}
+          onReset={g.reset}
         />
       )}
       {s.screen === 'exhausted' && (
-        <ExhaustedScreen onReshuffle={g.reshuffle} onRestart={g.fullRestart} />
+        <ExhaustedScreen onResetReplay={g.resetReplay} onRestart={g.fullRestart} />
       )}
 
       <AnimatePresence>

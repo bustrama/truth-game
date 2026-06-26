@@ -3,10 +3,10 @@
 import { PrimaryButton, OptionButton } from '@/components/ui/buttons';
 
 export function ExhaustedScreen({
-  onReshuffle,
+  onResetReplay,
   onRestart,
 }: {
-  onReshuffle: () => void;
+  onResetReplay: () => void;
   onRestart: () => void;
 }) {
   return (
@@ -31,17 +31,17 @@ export function ExhaustedScreen({
 
       <div className="flex flex-col gap-2">
         <h1 className="font-serif font-bold text-[25px] leading-[1.35] m-0">
-          נגמרו השאלות
+          ראיתם את כל השאלות
         </h1>
         <p className="m-0 text-[15px] text-muted leading-[1.6]">
-          עברתם על כל הקלפים בקטגוריות שבחרתם.
+          עברתם על כל השאלות שמתאימות לכם. אפשר לאפס ולהתחיל סבב חדש מההתחלה.
         </p>
       </div>
 
       <div className="flex flex-col gap-2.5 w-full max-w-[300px]">
-        <PrimaryButton onClick={onReshuffle}>לערבב מחדש</PrimaryButton>
+        <PrimaryButton onClick={onResetReplay}>לאפס ולשחק שוב</PrimaryButton>
         <OptionButton className="!py-4 min-h-[54px] !text-base" onClick={onRestart}>
-          להתחיל מחדש
+          להתחיל מחדש עם הגדרות אחרות
         </OptionButton>
       </div>
     </div>

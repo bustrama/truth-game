@@ -1,6 +1,9 @@
 'use client';
 
-import { PrimaryButton } from '@/components/ui/buttons';
+import { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import { PrimaryButton, GhostButton } from '@/components/ui/buttons';
+import { MenuSheet } from '@/components/ui/MenuSheet';
 import { BRAND } from '@/lib/brand';
 
 const STEPS = [
@@ -9,10 +12,31 @@ const STEPS = [
   'שולפים קלף, עונים באמת, וממשיכים הלאה.',
 ];
 
-export function WelcomeScreen({ onBegin }: { onBegin: () => void }) {
+export function WelcomeScreen({
+  onBegin,
+  hasSaved,
+  onReset,
+}: {
+  onBegin: () => void;
+  hasSaved: boolean;
+  onReset: () => void;
+}) {
+  const [confirmReset, setConfirmReset] = useState(false);
+
   return (
     <div className="flex-1 flex flex-col overflow-y-auto px-[22px] py-9 max-w-[520px] w-full mx-auto">
-      <div className="my-auto flex flex-col gap-9 animate-fade">
+      <div className="my-auto flex flex-col gap-8 animate-fade">
+        {/* Brand icon */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/icon-512.png"
+          alt={BRAND.nameHe}
+          width={108}
+          height={108}
+          className="mx-auto rounded-[26px]"
+          style={{ boxShadow: '0 20px 44px -18px rgba(0,0,0,.75)' }}
+        />
+
         {/* Hero */}
         <div className="flex flex-col gap-3 items-center text-center">
           <h1 className="font-serif font-bold text-[44px] leading-[1.05] m-0 text-ink">
@@ -47,10 +71,43 @@ export function WelcomeScreen({ onBegin }: { onBegin: () => void }) {
         <div className="flex flex-col gap-3 pt-1">
           <PrimaryButton onClick={onBegin}>בואו נתחיל</PrimaryButton>
           <p className="m-0 text-center text-[12px] leading-[1.6] text-muted-2">
-            בלי הרשמה. שום תשובה לא נשמרת. רק אתם והשאלות.
+            בלי הרשמה. התשובות נשארות ביניכם — רק ההתקדמות נשמרת במכשיר שלכם.
           </p>
+          {hasSaved && (
+            <GhostButton
+              className="self-center !text-[12px]"
+              onClick={() => setConfirmReset(true)}
+            >
+              איפוס נתונים
+            </GhostButton>
+          )}
         </div>
       </div>
+
+      <AnimatePresence>
+        {confirmReset && (
+          <MenuSheet
+            onClose={() => setConfirmReset(false)}
+            title="לאפס את הנתונים?"
+            note="ימחקו ההתקדמות והשאלות שכבר עלו. הכול נשמר רק במכשיר שלכם."
+            actions={[
+              {
+                label: 'לאפס הכול',
+                tone: 'danger',
+                onClick: () => {
+                  setConfirmReset(false);
+                  onReset();
+                },
+              },
+              {
+                label: 'ביטול',
+                tone: 'default',
+                onClick: () => setConfirmReset(false),
+              },
+            ]}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

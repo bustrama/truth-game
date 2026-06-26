@@ -177,4 +177,20 @@ describe('buildDeck', () => {
       if (!isEligible(q, intake)) expect(idSet.has(q.id)).toBe(false);
     }
   });
+
+  it('excludes already-asked ids (no-repeat across rounds)', () => {
+    const intake = makeIntake();
+    const full = buildDeck(QUESTIONS, intake, 7).ids;
+    const exclude = new Set(full.slice(0, 50));
+    const next = buildDeck(QUESTIONS, intake, 7, exclude).ids;
+    expect(next).toHaveLength(full.length - 50);
+    for (const id of exclude) expect(next).not.toContain(id);
+  });
+
+  it('returns an empty deck when everything has been asked', () => {
+    const intake = makeIntake();
+    const full = buildDeck(QUESTIONS, intake, 3).ids;
+    const { ids } = buildDeck(QUESTIONS, intake, 3, new Set(full));
+    expect(ids).toHaveLength(0);
+  });
 });

@@ -1,9 +1,11 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { TopBar } from './TopBar';
 import { CardStack } from './CardStack';
 import { PrimaryButton } from '@/components/ui/buttons';
+import { MenuSheet } from '@/components/ui/MenuSheet';
 import { turnFor } from '@/lib/deckView';
 import type { Gender } from '@/lib/types';
 
@@ -17,6 +19,7 @@ export function DeckScreen({
   reduced,
   onAdvance,
   onQuit,
+  onReset,
 }: {
   deck: string[];
   cursor: number;
@@ -25,8 +28,10 @@ export function DeckScreen({
   reduced: boolean;
   onAdvance: () => void;
   onQuit: () => void;
+  onReset: () => void;
 }) {
   const [locked, setLocked] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const lockRef = useRef(false);
 
   function advance() {
@@ -54,7 +59,12 @@ export function DeckScreen({
 
   return (
     <div className="flex-1 flex flex-col px-[18px] pt-[18px] pb-[30px] max-w-[520px] w-full mx-auto">
-      <TopBar cur={cur} total={total} turnLabel={topTurn} onQuit={onQuit} />
+      <TopBar
+        cur={cur}
+        total={total}
+        turnLabel={topTurn}
+        onQuit={() => setMenuOpen(true)}
+      />
 
       <CardStack
         deck={deck}
@@ -78,6 +88,38 @@ export function DeckScreen({
           {reduced ? 'הקישו להמשך' : 'החליקו את הקלף או הקישו'}
         </div>
       </div>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <MenuSheet
+            onClose={() => setMenuOpen(false)}
+            note="ההתקדמות נשמרת במכשיר שלכם בלבד."
+            actions={[
+              {
+                label: 'להמשיך לשחק',
+                tone: 'default',
+                onClick: () => setMenuOpen(false),
+              },
+              {
+                label: 'לצאת למסך הבית',
+                tone: 'default',
+                onClick: () => {
+                  setMenuOpen(false);
+                  onQuit();
+                },
+              },
+              {
+                label: 'לאפס את ההתקדמות',
+                tone: 'danger',
+                onClick: () => {
+                  setMenuOpen(false);
+                  onReset();
+                },
+              },
+            ]}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

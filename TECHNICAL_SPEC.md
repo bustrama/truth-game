@@ -232,7 +232,7 @@ tagidli/
 
 ## 8. State persistence (no server)
 
-- `storage.ts` serializes `GameState` to one `localStorage` key (`tagidli:game`) and `Intake` to (`tagidli:intake`).
+- `storage.ts` serializes `GameState` to one `localStorage` key (`tagidli:game`), `Intake` to (`tagidli:intake`), and the persistent asked-question history to (`tagidli:seen`) so new rounds skip questions already asked. A user-facing reset clears all three.
 - Write on: intake completion, each draw, each turn change.
 - Read on: app mount → hydrate or show fresh intake.
 - Provide a "reset" control that clears both keys.

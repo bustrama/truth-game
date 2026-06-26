@@ -49,15 +49,20 @@ export interface BuiltDeck {
 }
 
 /**
- * Deck construction: filter → seeded shuffle → ids.
- * Returns the seed so the same deck can be reproduced on resume.
+ * Deck construction: filter → drop already-asked → seeded shuffle → ids.
+ * `exclude` carries the persistent asked-question history so new rounds don't
+ * repeat. Returns the seed so the same deck can be reproduced on resume.
  */
 export function buildDeck(
   questions: readonly Question[],
   intake: Intake,
   seed: number = randomSeed(),
+  exclude?: ReadonlySet<string>,
 ): BuiltDeck {
-  const eligible = eligibleQuestions(questions, intake);
+  let eligible = eligibleQuestions(questions, intake);
+  if (exclude && exclude.size > 0) {
+    eligible = eligible.filter((q) => !exclude.has(q.id));
+  }
   const ids = shuffle(eligible, seed).map((q) => q.id);
   return { ids, seed };
 }
