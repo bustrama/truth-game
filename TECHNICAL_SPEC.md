@@ -1,7 +1,9 @@
-# אמת או אמת — Technical System Specification
+# תגיד לי — Technical System Specification
 
 **Product:** A mobile-first card game for two people (couples or friends) to get to know each other through "truth" prompts. Hebrew, RTL.
-**Slug:** `truth-or-truth`
+**Brand:** `תגיד לי` (Tagidli) · tagidli.com. Wordmark is the fixed masculine form; not auto-gendered.
+**Icon:** two overlapping speech bubbles forming a card in their overlap — gold (#E6B45A→#F2D49A) front, dark plum (#1E1830) outlined back.
+**Slug:** `tagidli`
 **Status:** V1 specification.
 
 ---
@@ -204,7 +206,7 @@ No route requires the network after first load. App is fully usable offline post
 ## 7. Project structure
 
 ```
-truth-or-truth/
+tagidli/
   app/
     layout.tsx          // dir="rtl" lang="he", fonts, theme
     page.tsx            // landing + intake
@@ -230,7 +232,7 @@ truth-or-truth/
 
 ## 8. State persistence (no server)
 
-- `storage.ts` serializes `GameState` to one `localStorage` key (`tot:game`) and `Intake` to (`tot:intake`).
+- `storage.ts` serializes `GameState` to one `localStorage` key (`tagidli:game`) and `Intake` to (`tagidli:intake`).
 - Write on: intake completion, each draw, each turn change.
 - Read on: app mount → hydrate or show fresh intake.
 - Provide a "reset" control that clears both keys.

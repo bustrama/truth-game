@@ -1,4 +1,4 @@
-# אמת או אמת — Truth or Truth
+# תגיד לי — Tagidli
 
 A mobile-first, Hebrew (RTL) card game for two people — couples or friends — to get
 to know each other through "truth" prompts. **Single-device pass-and-play**: one phone,

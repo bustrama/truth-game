@@ -1,8 +1,8 @@
 {
-  "name": "truth-or-truth",
+  "name": "tagidli",
   "version": "1.0.0",
   "private": true,
-  "description": "אמת או אמת — a Hebrew, RTL, single-device pass-and-play card game for two people.",
+  "description": "תגיד לי (Tagidli) — a Hebrew, RTL, single-device pass-and-play card game for two people.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -1,6 +1,7 @@
 'use client';
 
 import { PrimaryButton } from '@/components/ui/buttons';
+import { BRAND } from '@/lib/brand';
 
 const STEPS = [
   'עונים על כמה שאלות קצרות, כדי להתאים את המשחק אליכם.',
@@ -15,11 +16,9 @@ export function WelcomeScreen({ onBegin }: { onBegin: () => void }) {
         {/* Hero */}
         <div className="flex flex-col gap-3 items-center text-center">
           <h1 className="font-serif font-bold text-[44px] leading-[1.05] m-0 text-ink">
-            אמת או אמת
+            {BRAND.nameHe}
           </h1>
-          <p className="m-0 text-[16px] text-muted-3">
-            שאלה אחת בכל פעם — וההיכרות מעמיקה.
-          </p>
+          <p className="m-0 text-[16px] text-muted-3">{BRAND.tagline}</p>
         </div>
 
         {/* Purpose */}

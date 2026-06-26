@@ -2,13 +2,14 @@
 
 import { StepShell } from './StepShell';
 import { OptionButton } from '@/components/ui/buttons';
+import { BRAND } from '@/lib/brand';
 
 export function AgeStep({ onPick }: { onPick: (isAdult: boolean) => void }) {
   return (
     <StepShell screen="age">
       <div className="flex flex-col gap-3.5 items-center text-center">
         <div className="text-xs tracking-[0.16em] text-muted font-semibold">
-          אמת או אמת
+          {BRAND.nameHe}
         </div>
         <h1 className="font-serif font-bold text-[30px] leading-[1.3] m-0 text-ink">
           בני כמה אתם?

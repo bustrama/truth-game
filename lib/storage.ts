@@ -1,8 +1,9 @@
 import type { GameState, Intake } from './types';
+import { BRAND } from './brand';
 
 // Single source of persistence. No PII leaves the device (spec §8/§9).
-const GAME_KEY = 'tot:game';
-const INTAKE_KEY = 'tot:intake';
+const GAME_KEY = `${BRAND.slug}:game`;
+const INTAKE_KEY = `${BRAND.slug}:intake`;
 
 function canStore(): boolean {
   return typeof window !== 'undefined' && !!window.localStorage;
