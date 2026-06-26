@@ -19,6 +19,7 @@ import {
 } from './storage';
 
 export type Screen =
+  | 'welcome'
   | 'age'
   | 'status'
   | 'kids'
@@ -51,7 +52,7 @@ export interface MachineState {
 }
 
 const initialState: MachineState = {
-  screen: 'age',
+  screen: 'welcome',
   isAdult: null,
   relationshipStatus: null,
   hasKids: null,
@@ -75,6 +76,7 @@ type Action =
   | { type: 'SET_MODE'; mode: PlayMode }
   | { type: 'SET_GENDER'; index: 0 | 1; gender: Gender }
   | { type: 'BACK' }
+  | { type: 'BEGIN' }
   | { type: 'START'; playerA: string; playerB: string }
   | { type: 'ADVANCE' }
   | { type: 'RESHUFFLE' }
@@ -116,6 +118,8 @@ function reducer(state: MachineState, action: Action): MachineState {
       }
       return { ...state, hydrated: true };
     }
+    case 'BEGIN':
+      return { ...state, screen: 'age' };
     case 'SET_AGE':
       return { ...state, isAdult: action.isAdult, screen: 'status' };
     case 'SET_STATUS':
@@ -149,13 +153,12 @@ function reducer(state: MachineState, action: Action): MachineState {
       return { ...state, deck: ids, cursor: 0, screen: 'deck' };
     }
     case 'QUIT':
-      return { ...state, screen: 'age' };
+      return { ...initialState, hydrated: true };
     case 'FULL_RESTART':
+      return { ...initialState, hydrated: true };
     case 'DO_RESTART':
-      return {
-        ...initialState,
-        hydrated: true,
-      };
+      // Returning player explicitly chose a fresh game — skip the landing.
+      return { ...initialState, hydrated: true, screen: 'age' };
     case 'DO_RESUME': {
       const saved = loadGame();
       if (!saved) return { ...state, showResume: false };
@@ -187,6 +190,7 @@ export interface GameApi {
   setKids: (hasKids: boolean) => void;
   setMode: (mode: PlayMode) => void;
   setGender: (index: 0 | 1, gender: Gender) => void;
+  begin: () => void;
   back: () => void;
   start: (playerA: string, playerB: string) => void;
   advance: () => void;
@@ -228,6 +232,7 @@ export function useGame(): GameApi {
     setKids: (hasKids) => dispatch({ type: 'SET_KIDS', hasKids }),
     setMode: (mode) => dispatch({ type: 'SET_MODE', mode }),
     setGender: (index, gender) => dispatch({ type: 'SET_GENDER', index, gender }),
+    begin: () => dispatch({ type: 'BEGIN' }),
     back: () => dispatch({ type: 'BACK' }),
     start: (playerA, playerB) => dispatch({ type: 'START', playerA, playerB }),
     advance: () => dispatch({ type: 'ADVANCE' }),

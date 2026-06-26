@@ -2,6 +2,7 @@
 
 import { AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useGame } from '@/lib/useGame';
+import { WelcomeScreen } from './WelcomeScreen';
 import { AgeStep } from './intake/AgeStep';
 import { StatusStep } from './intake/StatusStep';
 import { KidsStep } from './intake/KidsStep';
@@ -19,6 +20,7 @@ export function Game() {
 
   return (
     <main className="relative w-full min-h-[100dvh] overflow-hidden flex flex-col">
+      {s.screen === 'welcome' && <WelcomeScreen onBegin={g.begin} />}
       {s.screen === 'age' && <AgeStep onPick={g.setAge} />}
       {s.screen === 'status' && <StatusStep onPick={g.setStatus} onBack={g.back} />}
       {s.screen === 'kids' && <KidsStep onPick={g.setKids} onBack={g.back} />}
