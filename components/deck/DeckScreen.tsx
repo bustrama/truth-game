@@ -93,7 +93,7 @@ export function DeckScreen({
         {menuOpen && (
           <MenuSheet
             onClose={() => setMenuOpen(false)}
-            note="ההתקדמות נשמרת במכשיר שלכם בלבד."
+            note="ההתקדמות נשמרת במכשיר הזה בלבד."
             actions={[
               {
                 label: 'להמשיך לשחק',
