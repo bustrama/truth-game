@@ -8,8 +8,8 @@ import { SupportButton } from '@/components/ui/SupportButton';
 import { BRAND } from '@/lib/brand';
 
 const STEPS = [
-  'עונים על כמה שאלות קצרות, כדי להתאים את המשחק אליכם.',
-  'מעבירים את הטלפון בין שניכם.',
+  'עונים על כמה שאלות קצרות, כדי להתאים את המשחק למשתתפים.',
+  'מעבירים את הטלפון בין שני המשתתפים.',
   'שולפים קלף, עונים באמת, וממשיכים הלאה.',
 ];
 
@@ -49,7 +49,7 @@ export function WelcomeScreen({
         {/* Purpose */}
         <p className="m-0 text-center text-[15px] leading-[1.75] text-muted max-w-[370px] mx-auto">
           כל קלף הוא שאלה, וכל שאלה היא הזדמנות לגלות משהו חדש זה על זה. בלי משימות
-          ובלי עונשים — רק אמת. לבני זוג, לחברים, או לכל שניים שרוצים להכיר לעומק.
+          ובלי עונשים — רק אמת. לבני זוג, לחברים, או לכל זוג משתתפים שרוצה להכיר לעומק.
         </p>
 
         {/* How it works */}
@@ -73,7 +73,7 @@ export function WelcomeScreen({
           <PrimaryButton onClick={onBegin}>בואו נתחיל</PrimaryButton>
           <SupportButton />
           <p className="m-0 text-center text-[12px] leading-[1.6] text-muted-2">
-            בלי הרשמה. התשובות נשארות ביניכם — רק ההתקדמות נשמרת במכשיר שלכם.
+            בלי הרשמה. התשובות נשארות בין המשתתפים — רק ההתקדמות נשמרת במכשיר הזה.
           </p>
           {hasSaved && (
             <GhostButton
@@ -91,7 +91,7 @@ export function WelcomeScreen({
           <MenuSheet
             onClose={() => setConfirmReset(false)}
             title="לאפס את הנתונים?"
-            note="ימחקו ההתקדמות והשאלות שכבר עלו. הכול נשמר רק במכשיר שלכם."
+            note="ימחקו ההתקדמות והשאלות שכבר עלו. הכול נשמר רק במכשיר הזה."
             actions={[
               {
                 label: 'לאפס הכול',

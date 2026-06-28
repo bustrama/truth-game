@@ -18,7 +18,7 @@ export function ModeStep({
   return (
     <StepShell screen="mode" onBack={onBack}>
       <h1 className="font-sans font-bold text-[27px] leading-[1.3] m-0 text-center">
-        איך אתם משחקים?
+        מה אופי המשחק?
       </h1>
       <div className="flex flex-col gap-3.5">
         {OPTS.map((o) => (

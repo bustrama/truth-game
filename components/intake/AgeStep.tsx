@@ -12,10 +12,10 @@ export function AgeStep({ onPick }: { onPick: (isAdult: boolean) => void }) {
           {BRAND.nameHe}
         </div>
         <h1 className="font-sans font-bold text-[30px] leading-[1.3] m-0 text-ink">
-          בני כמה אתם?
+          מה גיל המשתתפים?
         </h1>
         <p className="m-0 text-sm leading-[1.6] text-muted max-w-[300px]">
-          זה מתאים את התוכן לגיל שלכם. לא מאמת זהות, לא נשמר בשום מקום.
+          זה מתאים את התוכן לגיל המשתתפים. לא מאמת זהות, לא נשמר בשום מקום.
         </p>
       </div>
       <div className="flex flex-col gap-3.5">

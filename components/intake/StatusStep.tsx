@@ -21,7 +21,7 @@ export function StatusStep({
   return (
     <StepShell screen="status" onBack={onBack}>
       <h1 className="font-sans font-bold text-[27px] leading-[1.3] m-0 text-center">
-        מה הסטטוס שלכם?
+        מה הסטטוס שמתאים למשחק?
       </h1>
       <div className="grid grid-cols-2 gap-3">
         {OPTS.map((o) => (
